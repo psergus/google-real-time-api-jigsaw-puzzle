@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1 Google Real Time API
+	button(id='authorizeButton', disabled) You must authorize
+	button(id='shuffle') Shuffle
+	button(id='solve') Solve
+	ul(id='sortable')
+	script
+		gapi.load("auth:client,drive-realtime,drive-share", function() {});
+	script(src='javascripts/strap.js')
+
