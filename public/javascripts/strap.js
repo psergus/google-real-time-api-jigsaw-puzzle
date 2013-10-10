@@ -5,11 +5,12 @@ $(function() {
 		var rows = 3;
 		var cols = 4;
 		var solve = function() {
-			for(var i = puzzlesNum - 1; i > 0 ; i--) {
-				console.log(i + ' insert before ' + (i-1));
+			for(var i = 1; i < puzzlesNum; i++) {
+				//console.log(i + ' insert after ' + (i-1));
 				$('#pic_' + i).insertAfter($('#pic_' + (i-1)));
 			}
 			$('#sortable').sortable('refresh');
+			//console.log( $( "#sortable" ).sortable( "toArray" ) );
 		}
 		var shuffle = function(b) { //Fisher-Yates implementation
 			var shuffled = [];
@@ -21,6 +22,7 @@ $(function() {
 				switchSquares(i, rand);
 			}
 			$('#sortable').sortable('refresh');
+			//console.log( $( "#sortable" ).sortable( "toArray" ) );
 		}
 		var switchSquares = function(indx1, indx2) {
 			if(indx1 != indx2) {
@@ -100,6 +102,8 @@ $(function() {
 		initPlaceHolder();
 		$('#sortable').sortable('refresh');
 		srcImage.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+
+		//buttons
 		$('#shuffle').on('click', function(e) {
 			shuffle( $( "#sortable" ).sortable( "toArray" ) );
 		});
