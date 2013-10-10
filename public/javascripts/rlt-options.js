@@ -1,19 +1,42 @@
-var RTL = function() {
+var RTL = function(puzzlesNum) {
 
+	this.puzzlesNum = puzzlesNum;
 	this.myList = null;
 	this.startCallback = null;
 	var $that = this;
 
+	var shuffleArray = function(b) {
+		var shuffled = [];
+		var rand;
+		for(var i = 0; i < b.length; i++) {
+			rand = Math.floor(Math.random()*i);
+			shuffled[i] = shuffled[rand];
+			shuffled[rand] = b[i];
+		}
+		return shuffled;
+	}
+
 	function initializeModel(model) {
 		$that.myList = model.createList();
 		model.getRoot().set('puzzle', $that.myList);
+		var init_array = [];
+		for(var i = 0; i < $that.puzzlesNum; i++) {
+			init_array.push(i);
+		}
+		console.log('initialized array');
+		var shuffled = shuffleArray(init_array);
+		console.log('shuffled array');
+		for(var i = 0; i < $that.puzzlesNum; i++) {
+			$that.myList.push( shuffled[i] );
+		}
+		console.log('pushed array to a model');
 		console.log($that.myList);
 	}
 	function onFileLoaded(doc) {
 		var puzzleList = doc.getModel().getRoot().get('puzzle');
 		console.log(puzzleList);
 		if($that.startCallback) {
-			$that.startCallback(puzzleList);
+			$that.startCallback(puzzleList, doc);
 		}
 	}
 	/**

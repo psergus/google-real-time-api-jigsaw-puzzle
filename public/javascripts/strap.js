@@ -1,9 +1,15 @@
+'use strict';
 $(function() {
-	var rtl = new RTL();
-	rtl.startRealtime( function(puzzleList) {
-		var puzzlesNum = 12;
-		var rows = 3;
-		var cols = 4;
+	var puzzlesNum = 12;
+	var rows = 3;
+	var cols = 4;
+	var rtl = new RTL(puzzlesNum);
+	rtl.startRealtime( function(puzzleList, realtimeDocument) {
+		var isNumber = function(n) {
+			return !isNaN(parseFloat(n)) && isFinite(n);
+		}
+		
+
 		var solve = function() {
 			for(var i = 1; i < puzzlesNum; i++) {
 				//console.log(i + ' insert after ' + (i-1));
@@ -11,6 +17,16 @@ $(function() {
 			}
 			$('#sortable').sortable('refresh');
 			//console.log( $( "#sortable" ).sortable( "toArray" ) );
+		}
+		var shuffleArray = function(b) {
+			var shuffled = [];
+			var rand;
+			for(var i = 0; i < b.length; i++) {
+				rand = Math.floor(Math.random()*i);
+				shuffled[i] = shuffled[rand];
+				shuffled[rand] = b[i];
+			}
+			return shuffled;
 		}
 		var shuffle = function(b) { //Fisher-Yates implementation
 			var shuffled = [];
@@ -24,22 +40,39 @@ $(function() {
 			$('#sortable').sortable('refresh');
 			//console.log( $( "#sortable" ).sortable( "toArray" ) );
 		}
+
+
 		var switchSquares = function(indx1, indx2) {
 			if(indx1 != indx2) {
 				$('#sortable li:eq(' + indx1 + ')').insertAfter($('#sortable li:eq(' + indx2 + ')'));
 			}
 			//don't forget to refresh the placeholder after all switches!!!
 		}
+		var UpdateOnChange = function(e) {
+			console.log( puzzleList.asArray() );
+			console.log("Item added", event.values);
+		}
+		var refreshFromDocument = function(a) {
+			for(var i = 1; i < a.length; i++) {
+				if(isNumber(a[i])) {
+					console.log(a[i] + ' insert after ' + a[i-1]);
+					$('#pic_' + a[i]).insertAfter($('#pic_' + a[i-1]));
+				}
+			}
+			$('#sortable').sortable('refresh');
+			console.log(a);
+			console.log( $( "#sortable" ).sortable( "toArray" ) );
+		}
 		var initPlaceHolder = function() {
+			var a = [];
 			for(var i = 0; i < puzzlesNum; i++) {
+				a.push(i);
 				var li_id = 'pic_' + i;
 				var canv_id = 'canv_' + i;
-				$('#sortable').append('<li class="ui-state-default" id="' + li_id + '"><canvas id="' + canv_id + '" width="104" height="94"></canvas></li>');
-				puzzleList.push({
-					id: li_id
-				});
+				$('#sortable').append('<li class="ui-state-default" id="' + li_id + '"><canvas id="' + canv_id + '"></canvas></li>');
 			}
 			console.log(puzzleList);
+			return a;
 		}
 
 		var srcImage = new Image();
@@ -60,10 +93,13 @@ $(function() {
 			$('#sortable li canvas').css({
 				width: stepx + 'px',
 				height: stepy + 'px'
+			}).attr({
+				width: stepx,
+				height: stepy
 			});
 
 			var img_index = 0;
-			for(j = 0, y = 0; j < rows; j += 1, y += stepy) {
+			for(var j = 0, y = 0; j < rows; j += 1, y += stepy) {
 				for(var i = 0, x = 0; i < cols; i += 1, x += stepx) {
 					images.push({
 						x: x,
@@ -75,6 +111,8 @@ $(function() {
 			}
 			//console.log(images);
 			drawImages();
+			//init our list from the model
+			refreshFromDocument(puzzleList.asArray());
 		}
 		var drawImages = function() {
 			$.each(images, function(index, img) {
@@ -89,27 +127,44 @@ $(function() {
 
 		//init sortable placeholder
 		$( "#sortable" ).sortable({
-			opacity: 0.6,
 			cursor: 'move',
+			delay: 150,
+			distance: 5,
+			forcePlaceholderSize: true,
+			grid: [ cols, rows ],
 			update: function(event, ui) {
 				var sortedIDs = $( "#sortable" ).sortable( "toArray" );
 				console.log(ui);
 				console.log( sortedIDs );
+				//determine which cell has moved
+				var cell_indx = ui.item[0].id.toString().substr(4);
+				var cell_position = sortedIDs.indexOf( ui.item[0].id.toString() );
+				console.log('We moved cell: ' + cell_indx + ' to cell ' + cell_position);
+
+				realtimeDocument.getModel().beginCompoundOperation();
+				puzzleList.removeValue( parseInt(cell_indx) );
+				puzzleList.insert( cell_position, parseInt(cell_indx) );
+				realtimeDocument.getModel().endCompoundOperation();
 			}
 		});
-		$( "#sortable" ).disableSelection();
+		//$( "#sortable" ).disableSelection();
 
-		initPlaceHolder();
+		var original_line = initPlaceHolder();
 		$('#sortable').sortable('refresh');
 		srcImage.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, UpdateOnChange);
 
+		/*
 		//buttons
 		$('#shuffle').on('click', function(e) {
-			shuffle( $( "#sortable" ).sortable( "toArray" ) );
+			//shuffle( $( "#sortable" ).sortable( "toArray" ) );
+			var shuffled = shuffleArray(original_line);
+			refreshFromDocument(shuffled);
 		});
 		$('#solve').on('click', function(e) {
 			solve();
 		});
+		*/
 	});
 
 })

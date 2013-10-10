@@ -19,6 +19,6 @@ a {
     float: left; 
     width: 100px; 
     height: 90px; 
-    font-size: 4em; 
+    /*font-size: 4em;*/
     text-align: center; 
 }
