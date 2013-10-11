@@ -49,7 +49,7 @@ $(function() {
 
 
 		var putOneAfterAnother = function(id1, id2) {
-			if(indx1 != indx2) {
+			if(id1 != id2) {
 				$('#pic_' + id1).insertAfter($('#pic_' + id2));
 			}
 			//don't forget to refresh the placeholder after all switches!!!
@@ -57,9 +57,24 @@ $(function() {
 		var UpdateOnChange = function(event) {
 			console.log( puzzleList.asArray() );
 			console.log("Item added", event.values);
-			for(var i = 0; i < event.values; i++) {
-				var prev_val = puzzleList.get( puzzleList.indexOf(event.values[i]) - 1);
-				putOneAfterAnother( event.values[i], prev_val);
+			for(var i = 0; i < event.values.length; i++) {
+				//console.log('through: ' + event.values[i]);
+				if(event.values[i] !== undefined) {
+					var indxOfPrev = puzzleList.indexOf(event.values[i]) - 1;
+					console.log('indxOfPrev: ' + indxOfPrev);
+					var curr_val = event.values[i];
+					var prev_val = 0;
+					if(indxOfPrev !== -1) {
+						prev_val = puzzleList.get( indxOfPrev );
+					}
+					else {
+						//switch
+						prev_val = curr_val;
+						prev_val = puzzleList.get( puzzleList.indexOf(event.values[i]) + 1);
+					}
+					putOneAfterAnother( curr_val, prev_val);
+					console.log( 'Put pic_' + curr_val + ' after pic_' + prev_val);
+				}
 			}
 			$('#sortable').sortable('refresh');
 		}
