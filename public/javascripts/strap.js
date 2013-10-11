@@ -40,17 +40,28 @@ $(function() {
 			$('#sortable').sortable('refresh');
 			//console.log( $( "#sortable" ).sortable( "toArray" ) );
 		}
-
-
 		var switchSquares = function(indx1, indx2) {
 			if(indx1 != indx2) {
 				$('#sortable li:eq(' + indx1 + ')').insertAfter($('#sortable li:eq(' + indx2 + ')'));
 			}
 			//don't forget to refresh the placeholder after all switches!!!
 		}
-		var UpdateOnChange = function(e) {
+
+
+		var putOneAfterAnother = function(id1, id2) {
+			if(indx1 != indx2) {
+				$('#pic_' + id1).insertAfter($('#pic_' + id2));
+			}
+			//don't forget to refresh the placeholder after all switches!!!
+		}
+		var UpdateOnChange = function(event) {
 			console.log( puzzleList.asArray() );
 			console.log("Item added", event.values);
+			for(var i = 0; i < event.values; i++) {
+				var prev_val = puzzleList.get( puzzleList.indexOf(event.values[i]) - 1);
+				putOneAfterAnother( event.values[i], prev_val);
+			}
+			$('#sortable').sortable('refresh');
 		}
 		var refreshFromDocument = function(a) {
 			for(var i = 1; i < a.length; i++) {
