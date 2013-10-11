@@ -1,8 +1,8 @@
 'use strict';
 $(function() {
-	var puzzlesNum = 12;
-	var rows = 3;
-	var cols = 4;
+	var puzzlesNum = 36;
+	var rows = 6;
+	var cols = 6;
 	var rtl = new RTL(puzzlesNum);
 	rtl.startRealtime( function(puzzleList, realtimeDocument) {
 		var isNumber = function(n) {
