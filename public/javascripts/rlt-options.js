@@ -1,5 +1,6 @@
 var RTL = function(puzzlesNum) {
 
+	this.appId = '957766365169.apps.googleusercontent.com';
 	this.puzzlesNum = puzzlesNum;
 	this.myList = null;
 	this.startCallback = null;
@@ -16,27 +17,27 @@ var RTL = function(puzzlesNum) {
 		return shuffled;
 	}
 
-	function initializeModel(model) {
+	var initializeModel = function(model) {
 		$that.myList = model.createList();
 		model.getRoot().set('puzzle', $that.myList);
 		var init_array = [];
 		for(var i = 0; i < $that.puzzlesNum; i++) {
 			init_array.push(i);
 		}
-		console.log('initialized array');
+		//console.log('initialized array');
 		var shuffled = shuffleArray(init_array);
-		console.log('shuffled array');
+		//console.log('shuffled array');
 		for(var i = 0; i < $that.puzzlesNum; i++) {
 			$that.myList.push( shuffled[i] );
 		}
-		console.log('pushed array to a model');
-		console.log($that.myList);
+		//console.log('pushed array to a model');
+		//console.log($that.myList);
 	}
-	function onFileLoaded(doc) {
+	var onFileLoaded = function(doc) {
 		var puzzleList = doc.getModel().getRoot().get('puzzle');
-		console.log(puzzleList);
+		//console.log(puzzleList);
 		if($that.startCallback) {
-			$that.startCallback(puzzleList, doc);
+			$that.startCallback(puzzleList, doc, $that.appId);
 		}
 	}
 	/**
@@ -46,7 +47,7 @@ var RTL = function(puzzlesNum) {
 		/**
 		* Client ID from the APIs Console.
 		*/
-		clientId: '957766365169.apps.googleusercontent.com',
+		clientId: $that.appId, // '957766365169.apps.googleusercontent.com',
 
 		/**
 		* The ID of the button to click to authorize. Must be a DOM element ID.

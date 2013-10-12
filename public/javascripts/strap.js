@@ -4,7 +4,7 @@ $(function() {
 	var rows = 6;
 	var cols = 6;
 	var rtl = new RTL(puzzlesNum);
-	rtl.startRealtime( function(puzzleList, realtimeDocument) {
+	rtl.startRealtime( function(puzzleList, realtimeDocument, appId) {
 		var isNumber = function(n) {
 			return !isNaN(parseFloat(n)) && isFinite(n);
 		}
@@ -81,13 +81,13 @@ $(function() {
 		var refreshFromDocument = function(a) {
 			for(var i = 1; i < a.length; i++) {
 				if(isNumber(a[i])) {
-					console.log(a[i] + ' insert after ' + a[i-1]);
+					//console.log(a[i] + ' insert after ' + a[i-1]);
 					$('#pic_' + a[i]).insertAfter($('#pic_' + a[i-1]));
 				}
 			}
 			$('#sortable').sortable('refresh');
-			console.log(a);
-			console.log( $( "#sortable" ).sortable( "toArray" ) );
+			//console.log(a);
+			//console.log( $( "#sortable" ).sortable( "toArray" ) );
 		}
 		var initPlaceHolder = function() {
 			var a = [];
@@ -97,14 +97,26 @@ $(function() {
 				var canv_id = 'canv_' + i;
 				$('#sortable').append('<li class="ui-state-default" id="' + li_id + '"><canvas id="' + canv_id + '"></canvas></li>');
 			}
-			console.log(puzzleList);
+			//console.log(puzzleList);
 			return a;
+		}
+		var share = function() {
+			var hash = location.hash,
+				regexID = /^#fileIds=([^\&]+)/,
+				matches;
+			if (matches = hash.match(regexID)) {
+				console.log(matches);
+				var fileId = matches[1];
+				var client = new gapi.drive.share.ShareClient(appId);
+				client.setItemIds([fileId]);
+				client.showSettingsDialog();
+			}
 		}
 
 		var srcImage = new Image();
 		var images = [];
 		srcImage.onload = function() {
-			console.log(this.width + ' x ' + this.height );
+			//console.log(this.width + ' x ' + this.height );
 			var stepx = this.width / cols;
 			var stepy = this.height / rows;
 			//twist css -- hehe
@@ -160,8 +172,8 @@ $(function() {
 			grid: [ cols, rows ],
 			update: function(event, ui) {
 				var sortedIDs = $( "#sortable" ).sortable( "toArray" );
-				console.log(ui);
-				console.log( sortedIDs );
+				//console.log(ui);
+				//console.log( sortedIDs );
 				//determine which cell has moved
 				var cell_indx = ui.item[0].id.toString().substr(4);
 				var cell_position = sortedIDs.indexOf( ui.item[0].id.toString() );
@@ -180,8 +192,12 @@ $(function() {
 		srcImage.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
 		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, UpdateOnChange);
 
-		/*
 		//buttons
+		$('#share').on('click', function(e) {
+			share();
+			return false;
+		});
+		/*
 		$('#shuffle').on('click', function(e) {
 			//shuffle( $( "#sortable" ).sortable( "toArray" ) );
 			var shuffled = shuffleArray(original_line);
