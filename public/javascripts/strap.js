@@ -5,6 +5,8 @@ $(function() {
 	var cols = 6;
 	var rtl = new RTL(puzzlesNum);
 	rtl.startRealtime( function(puzzleList, realtimeDocument, params) {
+		var collaborators = [];
+
 		var isNumber = function(n) {
 			return !isNaN(parseFloat(n)) && isFinite(n);
 		}
@@ -47,6 +49,16 @@ $(function() {
 			//don't forget to refresh the placeholder after all switches!!!
 		}
 
+		var collaboratorListener = function () {
+			collaborators = realtimeDocument.getCollaborators();
+		}
+		var updateCollaboratorsList = function(collaborators) {
+			$('#collaborators').empty();
+			$.each(collaborators, function(index, obj) {
+				console.log(obj);
+				//$('#sortable').append('<li class="ui-state-default" id="' + li_id + '"><canvas id="' + canv_id + '"></canvas></li>');
+			});
+		}
 
 		var putOneAfterAnother = function(id1, id2) {
 			if(id1 != id2) {
@@ -186,6 +198,12 @@ $(function() {
 		$('#sortable').sortable('refresh');
 		srcImage.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
 		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, UpdateOnChange);
+		realtimeDocument.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, collaboratorListener);
+		realtimeDocument.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, collaboratorListener);
+		//get collaborators and update
+		collaborators = realtimeDocument.getCollaborators();
+		updateCollaboratorsList(collaborators);
+
 
 		//buttons
 		$('#share').on('click', function(e) {
