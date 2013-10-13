@@ -22,7 +22,9 @@ a {
     /*font-size: 4em;*/
     text-align: center; 
 }
-
+#share {
+    float: right;
+}
 #collaborators {
     list-style-type: none;
     height: 70px;
