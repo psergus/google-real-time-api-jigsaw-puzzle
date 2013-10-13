@@ -1,9 +1,10 @@
 var RTL = function(puzzlesNum) {
 
-	this.appId = '957766365169.apps.googleusercontent.com';
+	this.appId = '957766365169-2cjtv3f4gkej9duils2mm5rjftpvrsch.apps.googleusercontent.com';
 	this.puzzlesNum = puzzlesNum;
 	this.myList = null;
 	this.startCallback = null;
+	this.realtimeLoader = null;
 	var $that = this;
 
 	var shuffleArray = function(b) {
@@ -35,9 +36,16 @@ var RTL = function(puzzlesNum) {
 	}
 	var onFileLoaded = function(doc) {
 		var puzzleList = doc.getModel().getRoot().get('puzzle');
-		//console.log(puzzleList);
 		if($that.startCallback) {
-			$that.startCallback(puzzleList, doc, $that.appId);
+			$that.startCallback(
+			    puzzleList, 
+			    doc, 
+			    {
+				appId: $that.appId,
+				fileIds: rtclient.getParams().fileIds,
+				userId: rtclient.getParams().userId
+			    }
+			);
 		}
 	}
 	/**
@@ -102,8 +110,8 @@ var RTL = function(puzzlesNum) {
 		},
 		startRealtime: function(callback) {
 			$that.startCallback = callback || null;
-			var realtimeLoader = new rtclient.RealtimeLoader(realtimeOptions);
-			realtimeLoader.start();
+			$that.realtimeLoader = new rtclient.RealtimeLoader(realtimeOptions);
+			$that.realtimeLoader.start();
 		}
 	};
 };

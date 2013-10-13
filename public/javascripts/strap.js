@@ -4,7 +4,7 @@ $(function() {
 	var rows = 6;
 	var cols = 6;
 	var rtl = new RTL(puzzlesNum);
-	rtl.startRealtime( function(puzzleList, realtimeDocument, appId) {
+	rtl.startRealtime( function(puzzleList, realtimeDocument, params) {
 		var isNumber = function(n) {
 			return !isNaN(parseFloat(n)) && isFinite(n);
 		}
@@ -101,16 +101,9 @@ $(function() {
 			return a;
 		}
 		var share = function() {
-			var hash = location.hash,
-				regexID = /^#fileIds=([^\&]+)/,
-				matches;
-			if (matches = hash.match(regexID)) {
-				console.log(matches);
-				var fileId = matches[1];
-				var client = new gapi.drive.share.ShareClient(appId);
-				client.setItemIds([fileId]);
-				client.showSettingsDialog();
-			}
+			var client = new gapi.drive.share.ShareClient(params.appId);
+			client.setItemIds([params.fileId]);
+			client.showSettingsDialog();
 		}
 
 		var srcImage = new Image();
