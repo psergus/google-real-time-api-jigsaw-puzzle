@@ -58,7 +58,7 @@ $(function() {
 			$.each(collaborators, function(index, obj) {
 				console.log(obj);
 				if(obj.userId != params.userId) {
-					$('#collaborators').append('<li class="collaborator"><img src="' + obj.photoUrl + '" border="0" alt="' + obj.displayName + '" + data-user-id="' + obj.userId + '" /></li>');
+					$('#collaborators').append('<li class="collaborator"><img src="' + obj.photoUrl + '" border="0" title="' + obj.displayName + '" + data-user-id="' + obj.userId + '" /></li>');
 				}
 			});
 		}
