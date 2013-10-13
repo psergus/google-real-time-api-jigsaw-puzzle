@@ -37,13 +37,14 @@ var RTL = function(puzzlesNum) {
 	var onFileLoaded = function(doc) {
 		var puzzleList = doc.getModel().getRoot().get('puzzle');
 		if($that.startCallback) {
+			var params = rtclient.getParams();
 			$that.startCallback(
 			    puzzleList, 
 			    doc, 
 			    {
 				appId: $that.appId,
-				fileIds: rtclient.getParams().fileIds,
-				userId: rtclient.getParams().userId
+				fileIds: params.fileIds,
+				userId: params.userId
 			    }
 			);
 		}
@@ -55,7 +56,7 @@ var RTL = function(puzzlesNum) {
 		/**
 		* Client ID from the APIs Console.
 		*/
-		clientId: $that.appId, // '957766365169.apps.googleusercontent.com',
+		clientId: $that.appId, 
 
 		/**
 		* The ID of the button to click to authorize. Must be a DOM element ID.
@@ -75,7 +76,7 @@ var RTL = function(puzzlesNum) {
 		/**
 		* The name of newly created Drive files.
 		*/
-		defaultTitle: "New Realtime Puzzle",
+		defaultTitle: "Jigsaw Puzzle",
 
 		/**
 		* The MIME type of newly created Drive Files. By default the application

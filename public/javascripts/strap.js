@@ -101,8 +101,10 @@ $(function() {
 			return a;
 		}
 		var share = function() {
-			var client = new gapi.drive.share.ShareClient(params.appId);
-			client.setItemIds([params.fileId]);
+			//var client = new gapi.drive.share.ShareClient(params.appId);
+			console.log('fileId: ' + params.fileIds);
+			var client = new gapi.drive.share.ShareClient(957766365169);
+			client.setItemIds([params.fileIds]);
 			client.showSettingsDialog();
 		}
 

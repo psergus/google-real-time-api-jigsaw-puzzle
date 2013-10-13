@@ -76,6 +76,17 @@ rtclient.getParams = function() {
   return params;
 }
 
+rtclient.getQueryVariable = function(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    console.log('Query variable %s not found', variable);
+}
 
 /**
  * Instance of the query parameters.
@@ -346,14 +357,18 @@ rtclient.RealtimeLoader.prototype.load = function() {
     fileIds = fileIds.split(',');
   }
   var userId = this.authorizer.userId;
-  var state = rtclient.params['state'];
+  //var state = rtclient.params['state'];
+  var state = rtclient.getQueryVariable('state');
 
   // Creating the error callback.
   var authorizer = this.authorizer;
 
+//console.log('rtclient.RealtimeLoader.prototype.load with fileIds: ' + fileIds);
+//console.log(state);
 
   // We have file IDs in the query parameters, so we will use them to load a file.
   if (fileIds) {
+    console.log('we know fileIds: ' + fileIds);
     for (var index in fileIds) {
       gapi.drive.realtime.load(fileIds[index], this.onFileLoaded, this.initializeModel, this.handleErrors);
     }
@@ -364,6 +379,7 @@ rtclient.RealtimeLoader.prototype.load = function() {
   // it and redirect to the fileId contained.
   else if (state) {
     var stateObj = rtclient.parseState(state);
+//console.log(stateObj);
     // If opening a file from Drive.
     if (stateObj.action == "open") {
       fileIds = stateObj.ids;
