@@ -23,15 +23,19 @@ a {
     text-align: center; 
 }
 
-#collaborators { 
-    list-style-type: none; 
+#collaborators {
+    list-style-type: none;
+    height: 70px;
+    margin: 0;
+    padding: 0;
 }
 #collaborators li {
     margin: 3px 3px 3px 0;
-    float: left;
+    float: right;
     width: 50px;
     height: 50px;
     text-align: center;
+    margin-left: 10px;
 }
 #collaborators li img {
     width: 50px;
