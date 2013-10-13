@@ -1,7 +1,8 @@
 extends layout
 
 block content
-	h1 Google Real Time API
+	div(id='collaborators')
+	h1 Jigsaw Puzzle
 	button(id='authorizeButton', disabled) You must authorize
 	button(id='shuffle') Shuffle
 	button(id='solve') Solve
@@ -10,4 +11,3 @@ block content
 	script
 		gapi.load("auth:client,drive-realtime,drive-share", function() {});
 	script(src='javascripts/strap.js')
-
