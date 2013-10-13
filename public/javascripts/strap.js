@@ -51,6 +51,7 @@ $(function() {
 
 		var collaboratorListener = function () {
 			collaborators = realtimeDocument.getCollaborators();
+			updateCollaboratorsList(collaborators);
 		}
 		var updateCollaboratorsList = function(collaborators) {
 			$('#collaborators').empty();
