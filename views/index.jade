@@ -2,11 +2,11 @@ extends layout
 
 block content
 	ul(id='collaborators')
+	button(id='share') Share
 	h1 Jigsaw Puzzle
 	button(id='authorizeButton', disabled) You must authorize
 	button(id='shuffle') Shuffle
 	button(id='solve') Solve
-	button(id='share') Share
 	ul(id='sortable')
 	script
 		gapi.load("auth:client,drive-realtime,drive-share", function() {});
