@@ -56,7 +56,7 @@ $(function() {
 			$('#collaborators').empty();
 			$.each(collaborators, function(index, obj) {
 				console.log(obj);
-				//$('#sortable').append('<li class="ui-state-default" id="' + li_id + '"><canvas id="' + canv_id + '"></canvas></li>');
+				$('#collaborators').append('<li class="collaborator"><img src="' + obj.photoUrl + '" border="0" alt="' + obj.displayName + '" + data-user-id="' + obj.userId + '" /></li>');
 			});
 		}
 
