@@ -71,7 +71,7 @@ $(function() {
 			$.each(collaborators, function(index, obj) {
 				console.log(obj);
 				if(!obj.isMe) {
-					$('#collaborators').append('<li class="collaborator"><img src="' + obj.photoUrl + '" border="0" title="' + obj.displayName + '" + data-user-id="' + obj.userId + '" /></li>');
+					$('#collaborators').append('<li class="collaborator" style="background-color: ' + obj.color + ';"><img src="' + obj.photoUrl + '" border="0" title="' + obj.displayName + '" + data-user-id="' + obj.userId + '" /></li>');
 				}
 			});
 		}
