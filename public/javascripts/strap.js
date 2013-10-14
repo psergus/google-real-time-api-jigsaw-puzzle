@@ -11,6 +11,15 @@ $(function() {
 			return !isNaN(parseFloat(n)) && isFinite(n);
 		}
 		
+		function installDriveApp() {
+			gapi.auth.authorize({
+				client_id: params.appId,
+				scope: 'https://www.googleapis.com/auth/drive.install',
+				immediate: false
+			}, function(authResult) {
+				alert('You have installed Jigsaw Puzzle App. Thank you!');
+			});
+		}
 
 		/*
 		var solve = function() {
@@ -124,13 +133,6 @@ $(function() {
 			//console.log(puzzleList);
 			return a;
 		}
-		var share = function() {
-			//var client = new gapi.drive.share.ShareClient(params.appId);
-			console.log('fileId: ' + params.fileIds);
-			var client = new gapi.drive.share.ShareClient(957766365169);
-			client.setItemIds([params.fileIds]);
-			client.showSettingsDialog();
-		}
 
 		var srcImage = new Image();
 		var images = [];
@@ -227,7 +229,11 @@ $(function() {
 
 		//buttons
 		$('#share').on('click', function(e) {
-			share();
+			//var client = new gapi.drive.share.ShareClient(params.appId);
+			console.log('fileId: ' + params.fileIds);
+			var client = new gapi.drive.share.ShareClient(957766365169);
+			client.setItemIds([params.fileIds]);
+			client.showSettingsDialog();
 			return false;
 		});
 		$('#shuffle').on('click', function(e) {
@@ -248,6 +254,9 @@ $(function() {
 			puzzleList.replaceRange(0, init_array);
 			realtimeDocument.getModel().endCompoundOperation();
 			refreshFromDocument(puzzleList.asArray());
+		});
+		$('#install').on('click', function() {
+			installDriveApp();
 		});
 	});
 
