@@ -12,6 +12,7 @@ $(function() {
 		}
 		
 
+		/*
 		var solve = function() {
 			for(var i = 1; i < puzzlesNum; i++) {
 				//console.log(i + ' insert after ' + (i-1));
@@ -20,6 +21,7 @@ $(function() {
 			$('#sortable').sortable('refresh');
 			//console.log( $( "#sortable" ).sortable( "toArray" ) );
 		}
+		*/
 		var shuffleArray = function(b) {
 			var shuffled = [];
 			var rand;
@@ -30,6 +32,7 @@ $(function() {
 			}
 			return shuffled;
 		}
+		/*
 		var shuffle = function(b) { //Fisher-Yates implementation
 			var shuffled = [];
 			var rand;
@@ -48,6 +51,7 @@ $(function() {
 			}
 			//don't forget to refresh the placeholder after all switches!!!
 		}
+		*/
 
 		var collaboratorListener = function () {
 			collaborators = realtimeDocument.getCollaborators();
@@ -230,17 +234,21 @@ $(function() {
 			//shuffle( $( "#sortable" ).sortable( "toArray" ) );
 			var shuffled = shuffleArray(original_line);
 			realtimeDocument.getModel().beginCompoundOperation();
-
-			realtimeDocument.getModel().endCompoundOperation();
 			puzzleList.replaceRange(0, shuffled);
-			refreshFromDocument(shuffled);
+			realtimeDocument.getModel().endCompoundOperation();
 			refreshFromDocument(puzzleList.asArray());
 		});
-		/*
 		$('#solve').on('click', function(e) {
-			solve();
+			var init_array = [];
+			for(var i = 0; i < puzzlesNum; i++) {
+				init_array.push(i);
+			}
+
+			realtimeDocument.getModel().beginCompoundOperation();
+			puzzleList.replaceRange(0, init_array);
+			realtimeDocument.getModel().endCompoundOperation();
+			refreshFromDocument(puzzleList.asArray());
 		});
-		*/
 	});
 
 })
