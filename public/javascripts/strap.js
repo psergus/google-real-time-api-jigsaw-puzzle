@@ -207,18 +207,28 @@ $(function() {
 		collaborators = realtimeDocument.getCollaborators();
 		updateCollaboratorsList(collaborators);
 
+		//just a polite behavior for google :)
+		$( window ).on('unload', function() {
+			realtimeDocument.removeEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, collaboratorListener);
+			realtimeDocument.removeEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, collaboratorListener);
+		});
 
 		//buttons
 		$('#share').on('click', function(e) {
 			share();
 			return false;
 		});
-		/*
 		$('#shuffle').on('click', function(e) {
 			//shuffle( $( "#sortable" ).sortable( "toArray" ) );
 			var shuffled = shuffleArray(original_line);
+			realtimeDocument.getModel().beginCompoundOperation();
+
+			realtimeDocument.getModel().endCompoundOperation();
+			puzzleList.replaceRange(0, shuffled);
 			refreshFromDocument(shuffled);
+			refreshFromDocument(puzzleList.asArray());
 		});
+		/*
 		$('#solve').on('click', function(e) {
 			solve();
 		});
