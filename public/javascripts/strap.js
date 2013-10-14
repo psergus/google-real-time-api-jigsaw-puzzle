@@ -200,7 +200,10 @@ $(function() {
 		var original_line = initPlaceHolder();
 		$('#sortable').sortable('refresh');
 		srcImage.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+		//document model events handlers
 		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, UpdateOnChange);
+		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_SET, UpdateOnChange);
+		//collaboratrs events handlers
 		realtimeDocument.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, collaboratorListener);
 		realtimeDocument.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, collaboratorListener);
 		//get collaborators and update
