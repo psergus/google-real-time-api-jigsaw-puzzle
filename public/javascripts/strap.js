@@ -93,6 +93,11 @@ $(function() {
 			}
 			$('#sortable').sortable('refresh');
 		}
+		var UpdateOnAllValues = function(event) {
+			console.log( puzzleList.asArray() );
+			refreshFromDocument(puzzleList.asArray());
+		}
+
 		var refreshFromDocument = function(a) {
 			for(var i = 1; i < a.length; i++) {
 				if(isNumber(a[i])) {
@@ -202,7 +207,7 @@ $(function() {
 		srcImage.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
 		//document model events handlers
 		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_ADDED, UpdateOnChange);
-		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_SET, UpdateOnChange);
+		puzzleList.addEventListener(gapi.drive.realtime.EventType.VALUES_SET, UpdateOnAllValues);
 		//collaboratrs events handlers
 		realtimeDocument.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, collaboratorListener);
 		realtimeDocument.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, collaboratorListener);
